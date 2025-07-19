@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instagram Growth</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #fff; color: #333; }
+    .page { display: none; padding: 20px; text-align: center; }
+    .active { display: block; }
+    h1 { color: #ff007f; font-size: 2rem; margin-bottom: 20px; }
+    .insta-logo { width: 100px; margin-bottom: 20px; }
+    input, select { padding: 10px; width: 90%; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc; }
+    select:focus { outline: none; border: 2px solid green; }
+    button { padding: 15px; width: 90%; background: linear-gradient(45deg, #ff007f, #ff4db8); color: white; border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+    .summary { margin-top: 20px; font-size: 1.2rem; }
+    .scanner { margin: 20px 0; font-size: 1.2rem; }
+    .timer { font-size: 2rem; color: green; margin-top: 10px; }
+    .final-msg { background: #8000ff; color: white; padding: 30px; font-size: 1.5rem; }
+    .note { font-size: 0.9rem; color: gray; margin-top: 5px; }
+    .bottom-image { margin-top: 40px; }
+    .bottom-image img { width: 100%; max-width: 300px; border-radius: 10px; }
+  </style>
+</head>
+<body>
+  <!-- Page 1 -->
+  <div class="page active" id="page1">
+    <h1>Follower Growth</h1>
+    <img src="instagram.png" alt="Instagram" class="insta-logo" />
+    <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+      <img src="instagram-icon.png" alt="icon" style="width:20px; position: absolute; left: 10%;"/>
+      <input type="text" id="instaID" placeholder="Write your ID" style="padding-left: 30px;" />
+    </div>
+    <div>
+      <select id="offerSelect">
+        <option value="">Select Offer</option>
+        <option value="views">₹100 – 5000 Views</option>
+        <option value="followers">₹50 – 1000 Followers</option>
+        <option value="likes">₹100 – 1000 Likes</option>
+        <option value="vip">₹300 – VIP Tick</option>
+        <option value="comments">₹100 – 500 Comments</option>
+      </select>
+    </div>
+    <button onclick="goToPage2()">Continue</button>
+    <div class="bottom-image" style="position: fixed; bottom: 10px; left: 0; width: 100%; text-align: center;">
+      <img src="photo1.png" alt="follower sample" />
+    </div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page" id="page2">
+    <h1>Confirm Details</h1>
+    <div class="summary" id="summaryText"></div>
+    <button onclick="goToPage3()">Proceed to Pay</button>
+  </div>
+
+  <!-- Page 3 -->
+  <div class="page" id="page3">
+    <h1>Pay Here</h1>
+    <div class="scanner" id="scannerImage">[scanner-xxx.png]</div>
+    <div class="timer" id="timer">10:00</div>
+    <div class="note">Limited time offer</div>
+  </div>
+
+  <!-- Page 4 -->
+  <div class="page" id="page4">
+    <div class="final-msg" id="finalMsg"></div>
+  </div>
+
+  <script>
+    let selectedOffer = '';
+    let instaID = '';
+
+    const offerMap = {
+      views: "₹100 – 5000 Views",
+      followers: "₹50 – 1000 Followers",
+      likes: "₹100 – 1000 Likes",
+      vip: "₹300 – VIP Tick",
+      comments: "₹100 – 500 Comments"
+    };
+
+    const scannerMap = {
+      views: "scanner-100.png",
+      followers: "scanner-50.png",
+      likes: "scanner-100.png",
+      vip: "scanner-300.png",
+      comments: "scanner-100.png"
+    };
+
+    function goToPage2() {
+      instaID = document.getElementById('instaID').value.trim();
+      const offer = document.getElementById('offerSelect').value;
+      if (!instaID || !offer) {
+        alert("Please fill all details.");
+        return;
+      }
+      selectedOffer = offer;
+      document.getElementById('summaryText').innerText =
+        `Instagram ID: ${instaID}\nSelected Offer: ${offerMap[offer]}`;
+      showPage(2);
+    }
+
+    function goToPage3() {
+      document.getElementById('scannerImage').innerText = scannerMap[selectedOffer];
+      showPage(3);
+      startTimer(600);
+    }
+
+    function startTimer(duration) {
+      let timer = duration, minutes, seconds;
+      const display = document.getElementById('timer');
+      const interval = setInterval(() => {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        display.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        if (--timer < 0) {
+          clearInterval(interval);
+          goToPage4();
+        }
+      }, 1000);
+    }
+
+    function goToPage4() {
+      const msgMap = {
+        views: "Your view request will be sent to " + instaID,
+        followers: "Your follower request will be sent to " + instaID,
+        likes: "Your like request will be sent to " + instaID,
+        vip: "Your VIP tick request will be sent to " + instaID,
+        comments: "Your comment request will be sent to " + instaID
+      };
+      document.getElementById('finalMsg').innerText = msgMap[selectedOffer] || "Request submitted.";
+      showPage(4);
+    }
+
+    function showPage(num) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + num).classList.add('active');
+    }
+  </script>
+</body>
+</html>
